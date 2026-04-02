@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>house of mu</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.11.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.11.1/core.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f0e8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #output {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #2c2c2c;
+            white-space: pre;
+            opacity: 1;
+            transition: opacity 0.6s ease;
+        }
+
+        #output.fade {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; padding: 1rem 1.5rem; font-family: 'Courier New', Courier, monospace; font-size: 0.65rem; color: #2c2c2c; text-align: justify; line-height: 1.6;">
+        house of mu (2026) - This poem is based on the 1967 program House of Dust by Alison Knowles and James Tenney, and modified in 2014, 2024 by Nick Montfort. This poem uses keywords generated from topic modeling the transcripts of 45 interviews of community leaders on Skid Row via the Walk the Talk archive (2014-2024), curated by the Los Angeles Poverty Department. From a selection of &#8220;stop words&#8221; from the corpus that the topic modeling algorithm excluded from its keyword generation, this poem inserts phrases from an in-depth interview conducted with Lorainne Morland about her lived experiences on Skid Row. The repetition of Morland&#8217;s words are opportunities to intervene on what the algorithm excludes and bring to question the matter of textual life.
+    </div>
+
+    <script type="py" async>
+import asyncio
+from random import choice, randint
+from js import document
+
+stop_words = ['gave', 'took', 'told', 'worked', 'everything']
+murmur = [
+    'Well, 31 years ago,',
+    'I lost everything,',
+    'I went through a lot,',
+    "That's what I kept doing,",
+    'That was a blessing That was a blessing,',
+    'I was a blessing,',
+    "It's just part of the spirit of life,",
+    'But she prayed for me'
+]
+
+reason = ['law', 'everyone', 'neighborhood', 'police', 'family', 'week', 'power', 'everything', 'court', 'eviction', 'disability', 'business']
+
+object = ['rat', 'folk', 'experience', 'relationship', 'water', 'situation', 'process', 'business']
+
+entity = ['shelter', 'office', 'neighborhood', 'county', 'hotel', 'room', 'tent', 'family', 'night', 'court']
+
+past_verb = ['gave', 'took', 'want', 'ended']
+
+object_2 = [' welfare', ' funding', ' everything', ' housing', ' healing']
+
+needs = ['clean', 'working', 'nothing', 'safe', 'better', 'nobody', 'crazy']
+
+def stanza():
+    parts = [
+        'unhoused by ' + choice(reason),
+        '      ' + 'treacherous ' + choice(object) + ' in the ' + choice(entity),
+        '            They ' + choice(past_verb) + choice(object_2),
+        '                  and I was not ' + choice(needs)
+    ]
+
+    stanza_lines = []
+
+    for line in parts:
+        stanza_lines.append(line)
+
+        if any(word in line.lower() for word in stop_words):
+            count = randint(1, 3)
+            chosen_murmur = choice(murmur)
+            for _ in range(count):
+                stanza_lines.append('                        ' + chosen_murmur)
+
+    return '\n'.join(stanza_lines) + '\n'
+
+el = document.getElementById('output')
+
+async def main():
+    while True:
+        el.classList.add('fade')
+        await asyncio.sleep(0.6)
+        el.textContent = stanza()
+        el.classList.remove('fade')
+        await asyncio.sleep(8.0)
+
+asyncio.ensure_future(main())
+    </script>
+</body>
+</html>
